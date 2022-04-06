@@ -1,0 +1,21 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app: {{ template "aws-ec2-tagger.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "aws-ec2-tagger.fullname" . }}
+  namespace: "default"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "aws-ec2-tagger.fullname" . }}
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: {{ template "aws-ec2-tagger.name" .}}
+    namespace: "default"
+{{- end -}}

@@ -1,0 +1,20 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app: {{ template "aws-ec2-tagger.name" . }}
+    chart: {{ .Chart.Name}}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "aws-ec2-tagger.fullname" . }}
+  namespace: "default"
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "nodes"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["aws-ec2-tagger-iam-credentials"]
+    verbs: ["get"]
+{{- end -}}
