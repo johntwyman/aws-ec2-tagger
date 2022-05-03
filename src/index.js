@@ -1,6 +1,8 @@
 'use strict';
 
-const express = require('express');
+import { getClusterNodes } from './lib/k8s';
+import express from 'express';
+
 
 // Constants
 const PORT = 8080;
@@ -14,3 +16,7 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
+
+const clusterNodes = getClusterNodes();
+
+console.log(JSON.stringify(clusterNodes));
