@@ -2,6 +2,7 @@
   "name": "aws-ec2-tagger",
   "version": "1.0.0",
   "main": "src/index.js",
+  "type": "module",
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-ec2": "^3.49.0",
@@ -12,5 +13,23 @@
   "author": "John Twyman",
   "scripts": {
     "start": "node src/index.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.17.10",
+    "@babel/preset-env": "^7.17.10"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "esmodules": true,
+            "node": "current"
+          }
+        }
+      ]
+    ]
   }
 }

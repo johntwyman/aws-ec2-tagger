@@ -1,6 +1,6 @@
 'use strict';
 
-import { getClusterNodes } from './lib/k8s';
+import getClusterNodes from './lib/k8s.js';
 import express from 'express';
 
 
