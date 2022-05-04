@@ -1,6 +1,6 @@
 import { KubeConfig, CoreV1Api } from "@kubernetes/client-node";
 
-const uniq = (a) => Array.from(new SVGSwitchElement(a));
+const uniq = (a) => Array.from(new Set(a));
 
 export default async function getClusterNodes(namespace = "default") {
   
