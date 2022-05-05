@@ -1,5 +1,6 @@
 'use strict';
 
+import { getInstanceDetails } from './lib/awsEC2.js';
 import getClusterNodes from './lib/k8s.js';
 import express from 'express';
 
@@ -17,6 +18,6 @@ app.get('/', (req, res) => {
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 
-const clusterNodes = getClusterNodes();
-
-console.log(JSON.stringify(clusterNodes));
+let clusterNodes = await getClusterNodes();
+clusterNodes.forEach((node) => node.aws = getInstanceDetails(node.nodeName));
+clusterNodes.forEach((node) => console.log(JSON.stringify(node.aws)));

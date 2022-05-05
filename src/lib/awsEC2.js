@@ -1,10 +1,8 @@
-import { DescribeInstancesCommand, CreateTagsCommand, DeleteTagsCommand } from "@aws-sdk/client-ec2";
-const  { EC2Client } = require( "@aws-sdk/client-ec2");
+import { EC2Client, DescribeInstancesCommand, CreateTagsCommand, DeleteTagsCommand } from "@aws-sdk/client-ec2";
 const REGION = "ap-southeast-2";
 const ec2Client = new EC2Client({ region: REGION });
 
-
-function getInstanceDetails(privateDnsName) {
+export async function getInstanceDetails(privateDnsName) {
   const params = {
     Filters: [
       { Name: "private-dns-name",
@@ -25,5 +23,3 @@ function getInstanceDetails(privateDnsName) {
     return null;
   }
 }
-
-
