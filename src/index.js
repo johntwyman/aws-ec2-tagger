@@ -19,5 +19,9 @@ app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 
 let clusterNodes = await getClusterNodes();
-clusterNodes.forEach((node) => node.aws = getInstanceDetails(node.nodeName));
-clusterNodes.forEach((node) => console.log(JSON.stringify(node.aws)));
+for (let node of clusterNodes) {
+  node.aws = await getInstanceDetails(node.nodeName));
+}
+for (let node of clusterNodes) {
+  console.log(JSON.stringify(node.aws));
+}
