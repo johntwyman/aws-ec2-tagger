@@ -16,12 +16,5 @@ app.get('/', (req, res) => {
   app.listen(PORT, HOST);
   console.log(`Running on http://${HOST}:${PORT}`);
   // Set up cron schedule
-  const task = cron.schedule('*/30 * * * *', refreshEC2Tags(), { scheduled: false });
-  task.start();
-  process.on('SIGTERM', () => {
-    task.destroy();
-  });
-  process.on('SIGINT', () => {
-    task.destroy();
-  });
+  cron.schedule('*/30 * * * *', refreshEC2Tags(), { scheduled: true });
 })();
