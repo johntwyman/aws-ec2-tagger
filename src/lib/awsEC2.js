@@ -45,7 +45,7 @@ export async function deleteTags(node, tagPrefix = 'k8s.io/aws-ec2-tagger:') {
 
 export async function createTags(node, tagPrefix = 'k8s.io/aws-ec2-tagger:') {
   const { instanceId } = node.aws;
-  const tagsToCreate = node.releases.map((release) => ({ Key: tagPrefix + release }));
+  const tagsToCreate = node.releases.map((release) => ({ Key: tagPrefix + release, Value: '' }));
   const params = {
     Resources: [instanceId],
     Tags: tagsToCreate,
