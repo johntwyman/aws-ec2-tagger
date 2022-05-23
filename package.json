@@ -13,12 +13,17 @@
   "description": "AWS EC2 resource tagger for Kubernetes",
   "author": "John Twyman",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "eslint": "eslint --max-warnings 0 src"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.17.10",
-    "@babel/preset-env": "^7.17.10"
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-env": "^7.17.10",
+    "eslint": "^8.16.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
   },
   "babel": {
     "presets": [

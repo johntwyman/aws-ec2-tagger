@@ -1,9 +1,6 @@
-'use strict';
-
-import { getInstanceDetails } from './lib/awsEC2.js';
-import getClusterNodes from './lib/k8s.js';
 import express from 'express';
-
+import { getInstanceDetails, createTags, deleteTags } from './lib/awsEC2';
+import getClusterNodes from './lib/k8s';
 
 // Constants
 const PORT = 8080;
@@ -18,9 +15,24 @@ app.get('/', (req, res) => {
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 
-let clusterNodes = await getClusterNodes();
-let output = await Promise.all(clusterNodes.map( async (node) => {
-  let details = await getInstanceDetails(node.nodeName);
-  node.aws = details; return node
+const clusterNodes = await getClusterNodes();
+let ec2Instances = await Promise.all(clusterNodes.map(async (node) => {
+  const details = await getInstanceDetails(node.nodeName);
+  const ec2Instance = node;
+  ec2Instance.aws = details; return ec2Instance;
 }));
-output.forEach((node) => console.log(JSON.stringify(node)));
+ec2Instances.forEach((node) => console.log(JSON.stringify(node)));
+
+// Delete all existing tagger tags
+ec2Instances.forEach((node) => deleteTags(node));
+// Create new tagger tags
+ec2Instances.forEach((node) => createTags(node));
+
+// Output changes
+ec2Instances = await Promise.all(clusterNodes.map(async (node) => {
+  const details = await getInstanceDetails(node.nodeName);
+  const ec2Instance = node;
+  ec2Instance.aws = details; return ec2Instance;
+}));
+
+ec2Instances.forEach((node) => console.log(JSON.stringify(node)));

@@ -1,18 +1,17 @@
-import * as k8s from "@kubernetes/client-node";
+import * as k8s from '@kubernetes/client-node';
 
-const uniq = (a) => Array.from(new Set(a));
+const uniq = (a) => Array.from(new Set(a)).filter((element) => element !== undefined);
 
-export default async function getClusterNodes(namespace = "default") {
-
+export default async function getClusterNodes(namespace = 'default') {
   const kc = new k8s.KubeConfig();
   kc.loadFromDefault();
   const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
   const pods = await k8sApi.listNamespacedPod(namespace);
 
-  let nodes = [];
+  const nodes = [];
   for (const pod of pods.body.items) {
-    let podName = pod.metadata.labels.app ? pod.metadata.labels.app : pod.metadata.name;
-    let releaseName = pod.metadata.labels.release ? pod.metadata.labels.release : undefined;
+    const podName = pod.metadata.labels.app ? pod.metadata.labels.app : pod.metadata.name;
+    const releaseName = pod.metadata.labels.release ? pod.metadata.labels.release : undefined;
     const node = nodes.find((x) => x.nodeName === pod.spec.nodeName);
     if (node) {
       node.pods.push(podName);
