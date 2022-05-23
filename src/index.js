@@ -1,4 +1,4 @@
-import * as cron from 'node-cron';
+import cron from 'node-cron';
 import express from 'express';
 import refreshEC2Tags from './lib/tagger';
 
