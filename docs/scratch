@@ -1,126 +1,27 @@
-CreateTagsCommand
+const k8s = require('@kubernetes/client-node');
+const uniq = (a) => Array.from(new Set(a)).filter((element) => element !== undefined);
+const kc = new k8s.KubeConfig(); kc.loadFromDefault();
+const k8sApi = kc.makeApiClient(k8s.CoreV1Api); const pods = await k8sApi.listNamespacedPod('default'); const nodes = [];
+for (const pod of pods.body.items) { const podName = pod.metadata.labels.app ? pod.metadata.labels.app : pod.metadata.name; const releaseName = pod.metadata.labels.release ? pod.metadata.labels.release : undefined; const node = nodes.find((x) => x.nodeName === pod.spec.nodeName); if (node) { node.pods.push(podName); node.releases.push(releaseName); } else nodes.push({ nodeName: pod.spec.nodeName, pods: [podName], releases: [releaseName] }); } for (const node of nodes) { node.pods = uniq(node.pods); node.releases = uniq(node.releases); }
 
-const run = async () => {
-  try {
-      const data = await ec2Client.send(new RunInstancesCommand(instanceParams));
-      console.log(data.Instances[0].InstanceId);
-      const instanceId = data.Instances[0].InstanceId;
-      console.log("Created instance", instanceId);
-      // Add tags to the instance
-      const tagParams = {
-          Resources: [instanceId],
-          Tags: [
-              {
-                  Key: "Name",
-                  Value: "SDK Sample",
-              },
-          ],
-      };
-      try {
-          const data = await ec2Client.send(new CreateTagsCommand(tagParams));
-          console.log("Instance tagged");
-      } catch (err) {
-          console.log("Error", err);
-      }
-  } catch (err) {
-      console.log("Error", err);
-  }
-};
-run();
+//
+// node --experimental-repl-await --experimental-specifier-resolution=node
 
-DeleteTagsRequest
+let { EC2Client, DescribeInstancesCommand } = await import('@aws-sdk/client-ec2');
+const REGION = 'ap-southeast-2';
+const ecClient = new EC2Client({ region: REGION });
 
-
-ProviderID: i-0ea86b92216c1b896
-
-> result.Reservations[0].Instances
-[
-  {
-    AmiLaunchIndex: 0,
-    ImageId: 'ami-0b72e846931519ea3',
-    InstanceId: 'i-091edc21f9ae25171',
-    InstanceType: 'm5a.large',
-    KernelId: undefined,
-    KeyName: 'kubernetes.prod.greens.systems-f4:21:8d:17:2e:08:fc:76:9d:1b:f5:23:cd:14:40:ee',
-    LaunchTime: 2022-04-18T18:50:36.000Z,
-    Monitoring: { State: 'disabled' },
-    Placement: {
-      AvailabilityZone: 'ap-southeast-2a',
-      Affinity: undefined,
-      GroupName: '',
-      PartitionNumber: undefined,
-      HostId: undefined,
-      Tenancy: 'default',
-      SpreadDomain: undefined,
-      HostResourceGroupArn: undefined
-    },
-    Platform: undefined,
-    PrivateDnsName: 'ip-172-20-105-184.ap-southeast-2.compute.internal',
-
-result = await ec2Client.send(new DescribeInstancesCommand({ Filters: [{ Name: "private-dns-name", Values: ["ip-172-20-105-184.ap-southeast-2.compute.internal"] }] }));
-
-const tagParams = {
-  Filters: [
-    {
-      Name: "resource-id"
-      Values: [instanceId]
-    }
-  ]
-};
-
-result = await ec2Client.send(new DescribeTagsCommand(...))
-
-
-function getInstanceId(privateDnsName) {
-  const params = {
-    Filters: [
-      { Name: "private-dns-name",
-        Values: [privateDnsName]
-      }
-    ]
-  };
+nodes.forEach((node) => {
+  const params = { Filters: [ { Name: 'private-dns-name', Values: [node.nodeName] }, ], };
   try {
     const data = await ec2Client.send(new DescribeInstancesCommand(params));
-    console.log("Instance retrieved");
-    return data.Reservations[0].Instances[0].InstanceId;
+    const result = {
+      instanceId: data.Reservations[0].Instances[0].InstanceId,
+      tags: data.Reservations[0].Instances[0].Tags,
+    };
+    return result;
   } catch (err) {
-    console.log("Error", err);
+    console.log('Error', err);
     return null;
   }
-}
-
-
-params = {
-  Filters: [
-    { Name: "private-dns-name",
-      Values: ["ip-172-20-105-184.ap-southeast-2.compute.internal"]
-    }
-  ]
-};
-
-data = await ec2Client.send(new DescribeInstancesCommand(params));
-
-result = {
-  instanceId: data.Reservations[0].Instances[0].InstanceId,
-  tags: data.Reservations[0].Instances[0].Tags
-};
-
----
-
-get pods
-
-get nodes
-
-build list of releases per node
-
-for each node
-- get instance id
-- get tags
-- filter release tags
-- delete release tags
-- for each release
-  - build tag list
-  - create release tags
-
-k8s.io/release-{releaseName}: true
-
+})
