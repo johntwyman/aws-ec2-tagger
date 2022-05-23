@@ -15,4 +15,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 // Set up cron schedule
-cron.schedule('*/30 * * * *', refreshEC2Tags(), { scheduled: true });
+cron.schedule('*/30 * * * *', refreshEC2Tags, { scheduled: true });
