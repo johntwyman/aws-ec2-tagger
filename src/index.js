@@ -12,9 +12,7 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-(async () => {
-  app.listen(PORT, HOST);
-  console.log(`Running on http://${HOST}:${PORT}`);
-  // Set up cron schedule
-  cron.schedule('*/30 * * * *', refreshEC2Tags(), { scheduled: true });
-})();
+app.listen(PORT, HOST);
+console.log(`Running on http://${HOST}:${PORT}`);
+// Set up cron schedule
+cron.schedule('*/30 * * * *', refreshEC2Tags(), { scheduled: true });

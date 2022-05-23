@@ -1,5 +1,4 @@
 FROM node:16-alpine3.14
-RUN apk add --no-cache bash
 WORKDIR /app
 COPY package*json ./
 RUN yarn --production
