@@ -14,6 +14,13 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# App config values
+config:
+  # Tag prefix to use when applying tags to EC2 instances
+  tagPrefix: 'k8s.io/aws-ec2-tagger:'
+
+# AWS credentials
+# IAM user must have an IAM policy that permits CreateTags and DeleteTags for EC2 Instances
 aws:
   accessKey: # <key>
   accessSecret: # <secret>

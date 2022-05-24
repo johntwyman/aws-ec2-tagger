@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-ec2-tagger-config
+  labels:
+    app: {{ template "aws-ec2-tagger.name" . }}
+    chart: {{ .Chart.Name}}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  TAGGER_TAG_PREFIX: {{ .Values.config.tagPrefix | quote }}

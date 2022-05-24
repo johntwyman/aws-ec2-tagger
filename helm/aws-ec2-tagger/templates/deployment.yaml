@@ -36,6 +36,8 @@ spec:
           envFrom:
           - secretRef:
               name: aws-ec2-tagger-iam-credentials
+          - configMapRef:
+              name: aws-ec2-tagger-config
           ports:
             - name: http
               containerPort: 8080

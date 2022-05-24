@@ -3,6 +3,7 @@ import {
 } from '@aws-sdk/client-ec2';
 
 const REGION = 'ap-southeast-2';
+const TAGPREFIX = (process.env.TAGGER_TAG_PREFIX) ? process.env.TAGGER_TAG_PREFIX : 'k8s.io/aws-ec2-tagger:';
 const ec2Client = new EC2Client({ region: REGION });
 
 export async function getInstanceDetails(privateDnsName) {
@@ -27,7 +28,7 @@ export async function getInstanceDetails(privateDnsName) {
   }
 }
 
-export async function deleteTags(node, tagPrefix = 'k8s.io/aws-ec2-tagger:') {
+export async function deleteTags(node, tagPrefix = TAGPREFIX) {
   const { instanceId } = node.aws;
   const tagsToDelete = node.aws.tags.filter((tag) => tag.Key.startsWith(tagPrefix));
   if (!tagsToDelete.length) {
@@ -46,7 +47,7 @@ export async function deleteTags(node, tagPrefix = 'k8s.io/aws-ec2-tagger:') {
   }
 }
 
-export async function createTags(node, tagPrefix = 'k8s.io/aws-ec2-tagger:') {
+export async function createTags(node, tagPrefix = TAGPREFIX) {
   const { instanceId } = node.aws;
   const tagsToCreate = node.releases.map((release) => ({ Key: tagPrefix + release, Value: 'true' }));
   if (!tagsToCreate.length) {
