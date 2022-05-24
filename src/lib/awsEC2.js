@@ -2,7 +2,7 @@ import {
   EC2Client, DescribeInstancesCommand, CreateTagsCommand, DeleteTagsCommand,
 } from '@aws-sdk/client-ec2';
 
-const REGION = 'ap-southeast-2';
+const REGION = (process.env.AWS_REGION) ? process.env.AWS_REGION : 'ap-southeast-2';
 const TAGPREFIX = (process.env.TAGGER_TAG_PREFIX) ? process.env.TAGGER_TAG_PREFIX : 'k8s.io/aws-ec2-tagger:';
 const ec2Client = new EC2Client({ region: REGION });
 

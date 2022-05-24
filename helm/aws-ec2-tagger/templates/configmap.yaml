@@ -8,4 +8,5 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 data:
+  AWS_REGION: {{ .Values.aws.region | quote }}
   TAGGER_TAG_PREFIX: {{ .Values.config.tagPrefix | quote }}
