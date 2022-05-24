@@ -30,6 +30,9 @@ export async function getInstanceDetails(privateDnsName) {
 export async function deleteTags(node, tagPrefix = 'k8s.io/aws-ec2-tagger:') {
   const { instanceId } = node.aws;
   const tagsToDelete = node.aws.tags.filter((tag) => tag.Key.startsWith(tagPrefix));
+  if (!tagsToDelete.length) {
+    return;
+  }
   const params = {
     Resources: [instanceId],
     Tags: tagsToDelete,
@@ -45,7 +48,10 @@ export async function deleteTags(node, tagPrefix = 'k8s.io/aws-ec2-tagger:') {
 
 export async function createTags(node, tagPrefix = 'k8s.io/aws-ec2-tagger:') {
   const { instanceId } = node.aws;
-  const tagsToCreate = node.releases.map((release) => ({ Key: tagPrefix + release, Value: '' }));
+  const tagsToCreate = node.releases.map((release) => ({ Key: tagPrefix + release, Value: 'true' }));
+  if (!tagsToCreate.length) {
+    return;
+  }
   const params = {
     Resources: [instanceId],
     Tags: tagsToCreate,

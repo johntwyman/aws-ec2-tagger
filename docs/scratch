@@ -9,7 +9,7 @@ for (const pod of pods.body.items) { const podName = pod.metadata.labels.app ? p
 
 let { EC2Client, DescribeInstancesCommand } = await import('@aws-sdk/client-ec2');
 const REGION = 'ap-southeast-2';
-const ecClient = new EC2Client({ region: REGION });
+const ec2Client = new EC2Client({ region: REGION });
 
 nodes.forEach((node) => {
   const params = { Filters: [ { Name: 'private-dns-name', Values: [node.nodeName] }, ], };
