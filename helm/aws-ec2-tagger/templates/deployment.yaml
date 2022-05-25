@@ -35,7 +35,11 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
           - secretRef:
+              {{- if .Values.create }}
               name: aws-ec2-tagger-iam-credentials
+              {{- else }}
+              name: {{ .Values.aws.secret.existingSecret }}
+              {{- end }}
           - configMapRef:
               name: aws-ec2-tagger-config
           ports:

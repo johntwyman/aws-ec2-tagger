@@ -17,7 +17,7 @@ fullnameOverride: ""
 # App config values
 config:
   # Tag prefix to use when applying tags to EC2 instances
-  tagPrefix: 'k8s.io/aws-ec2-tagger:'
+  tagPrefix: "ec2-tagger/release:"
 
 # AWS settings
 aws:
@@ -27,10 +27,11 @@ aws:
 
   # Specifies whether to create a cluster Secret object that contains
   # the AWS IAM user credentials.
-  # If set to false, you must manually create a cluster Secret.
-  # See templates/secret.yaml for more info
+  # If set to false, you must manually create a cluster Secret and
+  # put its name in the existingSecret value.
   secret:
-    create: true
+    create: false
+    existingSecret: "foo-bar-iam-credentials"
 rbac:
   # Specifies whether a Cluster Role and Cluster Role Binding should be created
   # Set this to false if you wish to manually bind existing ClusterRole or Role
@@ -44,7 +45,6 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: "aws-ec2-tagger"
 
 podAnnotations: {}
 
