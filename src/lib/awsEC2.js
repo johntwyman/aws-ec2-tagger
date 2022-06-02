@@ -49,7 +49,7 @@ export async function deleteTags(node, tagPrefix = TAGPREFIX) {
 
 export async function createTags(node, tagPrefix = TAGPREFIX) {
   const { instanceId } = node.aws;
-  const tagsToCreate = node.releases.map((release) => ({ Key: tagPrefix + release, Value: 'true' }));
+  const tagsToCreate = node.instances.map((release) => ({ Key: tagPrefix + release, Value: 'true' }));
   if (!tagsToCreate.length) {
     return;
   }

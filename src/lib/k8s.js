@@ -11,17 +11,17 @@ export default async function getClusterNodes(namespace = 'default') {
   const nodes = [];
   for (const pod of pods.body.items) {
     const podName = pod.metadata.labels.app ? pod.metadata.labels.app : pod.metadata.name;
-    const releaseName = pod.metadata.labels.release ? pod.metadata.labels.release : undefined;
+    const instanceName = pod.metadata.labels['app.kubernetes.io/instance'] ? pod.metadata.labels['app.kubernetes.io/instance'] : undefined;
     const node = nodes.find((x) => x.nodeName === pod.spec.nodeName);
     if (node) {
       node.pods.push(podName);
-      node.releases.push(releaseName);
-    } else nodes.push({ nodeName: pod.spec.nodeName, pods: [podName], releases: [releaseName] });
+      node.instances.push(instanceName);
+    } else nodes.push({ nodeName: pod.spec.nodeName, pods: [podName], instances: [instanceName] });
   }
 
   for (const node of nodes) {
     node.pods = uniq(node.pods);
-    node.releases = uniq(node.releases);
+    node.instances = uniq(node.instances);
   }
 
   return nodes;

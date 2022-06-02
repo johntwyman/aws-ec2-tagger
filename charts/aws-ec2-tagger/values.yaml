@@ -30,8 +30,8 @@ aws:
   # If set to false, you must manually create a cluster Secret and
   # put its name in the existingSecret value.
   secret:
-    create: false
-    existingSecret: "foo-bar-iam-credentials"
+    create: true
+    existingSecret: "aws-ec2-iam-credentials"
 rbac:
   # Specifies whether a Cluster Role and Cluster Role Binding should be created
   # Set this to false if you wish to manually bind existing ClusterRole or Role
