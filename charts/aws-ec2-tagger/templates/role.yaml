@@ -15,6 +15,10 @@ rules:
     verbs: ["get", "watch", "list"]
   - apiGroups: [""]
     resources: ["secrets"]
+    {{- if .Values.aws.secret.create }}
     resourceNames: ["aws-ec2-tagger-iam-credentials"]
+    {{- else }}
+    resourceNames: [{{ .Values.aws.secret.existingSecret | quote }}]
+    {{- end }}
     verbs: ["get"]
 {{- end -}}

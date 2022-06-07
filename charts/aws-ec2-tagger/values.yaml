@@ -17,7 +17,7 @@ fullnameOverride: ""
 # App config values
 config:
   # Tag prefix to use when applying tags to EC2 instances
-  tagPrefix: "ec2-tagger/release:"
+  tagPrefix: "app.kubernetes.io/instance:"
 
 # AWS settings
 aws:
@@ -30,8 +30,8 @@ aws:
   # If set to false, you must manually create a cluster Secret and
   # put its name in the existingSecret value.
   secret:
-    create: true
-    existingSecret: "aws-ec2-iam-credentials"
+    create: false
+    existingSecret: "ec2-tagger-user-credentials"
 rbac:
   # Specifies whether a Cluster Role and Cluster Role Binding should be created
   # Set this to false if you wish to manually bind existing ClusterRole or Role
